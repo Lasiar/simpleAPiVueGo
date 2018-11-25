@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>simple example</title>
+</head>
+<body>
+
+<div id="app">
+    <h1>Получение информации по серверам</h1>
+    <form @submit.prevent="getInfo">
+        <label> url:
+            <input required pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" v-model="url">
+            <input type="submit" value="сделать запрос">
+        </label>
+    </form>
+    <ul>
+        <li v-for="item in messages"> на {{item.hostname}} время: {{item.time}}</li>
+    </ul>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+
+<script>
+
+    const vm = new Vue({
+        el: "#app",
+        data: {
+            url: '',
+            messages: []
+        },
+        computed: {
+            getHTTPAllowedAddr() {
+                return 'http://' + this.url + ':9000'
+            }
+        },
+        methods: {
+            getInfo() {
+                axios.get(this.getHTTPAllowedAddr + '/api/get-server-time')
+                    .then(response => {
+                        this.messages.push(response.data)
+                    })
+                    .catch(error => {
+                        alert(error.toString())
+                    })
+            },
+            test() {
+                alert('ok')
+            }
+        }
+    })
+</script>
+</body>
+</html>

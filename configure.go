@@ -30,7 +30,6 @@ func (c *config) load() error {
 	return nil
 }
 
-
 // singleton
 func GetConfig() *config {
 	_once.Do(func() {
